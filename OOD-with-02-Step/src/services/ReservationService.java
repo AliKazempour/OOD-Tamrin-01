@@ -4,42 +4,27 @@ import constants.Notifier;
 import constants.PaymentMethods;
 
 public class ReservationService {
-    private Notifier notifier = Notifier.EMAIL; //default Notifier
-    private PaymentProcessor paymentProcessor = new PaymentProcessor();
 
-    public void makeReservation(Reservation res, PaymentMethods paymentType, Notifier notifier){
-        System.out.println("Processing reservation for " + res.customer.name);
+    private final PaymentProcessor paymentProcessor;
+    private final NotificationFactory notificationFactory;
 
-        if(res.customer.city.equals("Paris")){
-            System.out.println("Apply city discount for Paris!");
-            res.room.price *= 0.9;
-        }
+    public ReservationService(PaymentProcessor paymentProcessor,
+            NotificationFactory notificationFactory) {
+        this.paymentProcessor = paymentProcessor;
+        this.notificationFactory = notificationFactory;
+    }
 
-        switch (paymentType){
-            case CARD:
-                paymentProcessor.payByCard(res.totalPrice());
-                break;
-            case PAYPAL:
-                paymentProcessor.payByPayPal(res.totalPrice());
-                break;
-            case CASH:
-                paymentProcessor.payByCash(res.totalPrice());
-                break;
-        }
+    public void makeReservation(Reservation res,
+            PaymentMethods paymentMethod,
+            Notifier notifier) {
+        PaymentStrategy strategy = paymentProcessor.getPaymentStrategy(paymentMethod);
+        strategy.pay(res.totalPrice());
 
-        System.out.println("----- INVOICE -----");
-        System.out.println("hotel.Customer: " + res.customer.name);
-        System.out.println("hotel.Room: " + res.room.number + " (" + res.room.type + ")");
-        System.out.println("Total: " + res.totalPrice());
-        System.out.println("-------------------");
+        NotificationSender sender = notificationFactory.create(notifier);
+        String contact = res.getContactByNotifier(notifier);
+        sender.send(contact, "Your reservation confirmed!");
 
-       switch (this.notifier){
-           case EMAIL :
-           EmailSender emailSender = new EmailSender();
-           emailSender.sendEmail(res.customer.email, "Your reservation confirmed!");
-           break;
-           default:
-               System.out.println("There is no Message Provider");
-       }
+        System.out.println("--------------------------------");
     }
 }
+

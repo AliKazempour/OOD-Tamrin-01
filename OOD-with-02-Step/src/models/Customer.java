@@ -2,6 +2,7 @@ public class Customer {
     public String name;
     public String email;
     public String mobile;
+    public String city;
 
     public String getName() {
         return name;
@@ -13,5 +14,9 @@ public class Customer {
 
     public String getMobile() {
         return mobile;
+    }
+
+    public String getCity() {
+        return city;
     }
 }
