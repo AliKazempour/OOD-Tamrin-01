@@ -1,7 +1,21 @@
 package services;
 
-class PaymentProcessor {
-    public void payByCard(double amount){ System.out.println("Paid by card: " + amount); }
-    public void payByCash(double amount){ System.out.println("Paid by cash: " + amount); }
-    public void payByPayPal(double amount){ System.out.println("Paid by PayPal: " + amount); }
+import constants.PaymentMethods;
+
+public class PaymentProcessor {
+
+    public PaymentStrategy getPaymentStrategy(PaymentMethods method) {
+        switch (method) {
+            case CARD:
+                return new CardPayment();
+            case CASH:
+                return new CashPayment();
+            case PAYPAL:
+                return new PaypalPayment();
+            case ONSITE:
+                return new OnSitePayment();
+            default:
+                throw new IllegalArgumentException("Unsupported payment method: " + method);
+        }
+    }
 }
