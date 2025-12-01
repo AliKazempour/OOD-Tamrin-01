@@ -16,7 +16,7 @@ public class Reservation {
     }
 
     public double totalPrice() {
-        return room.price * nights;
+        return room.getPrice() * nights;
     }
 
     public String getCustomerName() {
