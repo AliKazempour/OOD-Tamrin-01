@@ -38,8 +38,15 @@ public class ReservationService {
            EmailSender emailSender = new EmailSender();
            emailSender.sendEmail(res.customer.email, "Your reservation confirmed!");
            break;
+
+           case SMS :
+             SmsSender smsSender = new SmsSender();
+        smsSender.sendSms(res.customer.mobile, "Your reservation confirmed!");
+        break;
+
+        
            default:
                System.out.println("There is no Message Provider");
-       }
+            }
     }
 }
