@@ -24,6 +24,8 @@ public class ReservationService {
                 break;
             case CASH:
                 paymentProcessor.payByCash(res.totalPrice());
+            case ONSITE :
+                paymentProcessor.onSitePayment(res.totalPrice());
                 break;
         }
 
