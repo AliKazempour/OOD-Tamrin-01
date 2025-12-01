@@ -1,9 +1,19 @@
 package models;
 
 public class Room {
-    public String number;
-    public String type; // "standard" or "luxury"
-    public double price;
+    private String number;
+    private String type;
+    private double price;
+
+    public Room(String number, String type, double price) {
+        this.number = number;
+        this.type = type;
+        this.price = price;
+    }
+
+    public void addFreeDinner() {
+        // default: no free dinner
+    }
 
     public String getNumber() {
         return number;
